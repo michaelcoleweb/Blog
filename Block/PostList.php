@@ -1,18 +1,22 @@
 <?php
+
 namespace MC\Blog\Block;
 
 use Mc\Blog\Api\Data\PostInterface;
 use Mc\Blog\Model\Resource\Post\Collection as PostCollection;
 
-class PostList extends \Magento\Framework\View\Element\Template implements
-    \Magento\Framework\DataObject\IdentityInterface
+/**
+ * Block used for listing posts
+ *
+ * @package MC\Blog\Block
+ */
+class PostList extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
-
     /**
      * Construct
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Ashsmith\Blog\Model\Resource\Post\CollectionFactory $postCollectionFactory,
+     * @param \Magento\Framework\View\Element\Template\Context  $context
+     * @param \Mc\Blog\Model\Resource\Post\CollectionFactory    $postCollectionFactory,
      * @param array $data
      */
     public function __construct(
@@ -29,18 +33,20 @@ class PostList extends \Magento\Framework\View\Element\Template implements
      */
     public function getPosts()
     {
-        // Check if posts has already been defined
-        // makes our block nice and re-usable! We could
-        // pass the 'posts' data to this block, with a collection
-        // that has been filtered differently!
         if (!$this->hasData('posts')) {
-            $posts = $this->_postCollectionFactory
-                ->create()
-                ->addFieldToFilter('is_active', array('eq' => 1))
-                ->addOrder(
-                    PostInterface::CREATION_TIME,
-                    PostCollection::SORT_ORDER_DESC
-                );
+            $posts = $this->_postCollectionFactory->create()
+            ->addFieldToFilter('main_table.is_active', array('eq' => 1))
+            ->addOrder(
+                PostInterface::CREATION_TIME,
+                PostCollection::SORT_ORDER_DESC
+            );
+
+            $posts->getSelect()->joinLeft(
+                'admin_user',
+                'main_table.admin_id = admin_user.user_id',
+                ['username']
+            );
+
             $this->setData('posts', $posts);
         }
         return $this->getData('posts');
@@ -55,5 +61,4 @@ class PostList extends \Magento\Framework\View\Element\Template implements
     {
         return [\Mc\Blog\Model\Post::CACHE_TAG . '_' . 'list'];
     }
-
 }

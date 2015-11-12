@@ -1,9 +1,15 @@
 <?php
+
 namespace Mc\Blog\Controller\View;
 
 use \Magento\Framework\App\Action\Action;
 
-class index extends Action
+/**
+ * Post view controller
+ *
+ * @package Mc\Blog\Controller\View
+ */
+class Index extends Action
 {
     /** @var  \Magento\Framework\View\Result\Page */
     protected $resultPageFactory;

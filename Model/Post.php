@@ -5,14 +5,18 @@ namespace Mc\Blog\Model;
 use Mc\Blog\Api\Data\PostInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 
+/**
+ * Post object class
+ *
+ * @package Mc\Blog\Model
+ */
 class Post extends \Magento\Framework\Model\AbstractModel implements PostInterface, IdentityInterface
 {
-    /**#@+
-     * Post's Statuses
+    /**
+     * Post status options
      */
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
-    /**#@-*/
 
     /**
      * CMS page cache tag
@@ -43,9 +47,11 @@ class Post extends \Magento\Framework\Model\AbstractModel implements PostInterfa
 
     /**
      * Check if post url key exists
+     *
      * return post id if post exists
      *
      * @param string $url_key
+     *
      * @return int
      */
     public function checkUrlKey($url_key)
@@ -55,6 +61,7 @@ class Post extends \Magento\Framework\Model\AbstractModel implements PostInterfa
 
     /**
      * Prepare post's statuses.
+     *
      * Available event blog_post_get_available_statuses to customize statuses.
      *
      * @return array
@@ -131,6 +138,16 @@ class Post extends \Magento\Framework\Model\AbstractModel implements PostInterfa
     public function getUpdateTime()
     {
         return $this->getData(self::UPDATE_TIME);
+    }
+
+    /**
+     * Get admin id
+     *
+     * @return int|null
+     */
+    public function getAdminID()
+    {
+        return $this->getData(self::ADMIN_ID);
     }
 
     /**
@@ -213,6 +230,18 @@ class Post extends \Magento\Framework\Model\AbstractModel implements PostInterfa
     public function setUpdateTime($update_time)
     {
         return $this->setData(self::UPDATE_TIME, $update_time);
+    }
+
+    /**
+     * Set Admin id of post
+     *
+     * @param int $adminId
+     *
+     * @return \Mc\Blog\Api\Data\PostInterface
+     */
+    public function setAdminId($adminId)
+    {
+        return $this->setAdminId(self::ADMIN_ID, $adminId);
     }
 
     /**

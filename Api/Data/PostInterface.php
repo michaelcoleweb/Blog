@@ -18,6 +18,7 @@ interface PostInterface
     const CREATION_TIME = 'creation_time';
     const UPDATE_TIME   = 'update_time';
     const IS_ACTIVE     = 'is_active';
+    const ADMIN_ID      = 'admin_id';
 
     /**
      * Get the post id
@@ -60,6 +61,13 @@ interface PostInterface
      * @return string|null
      */
     public function getUpdateTime();
+
+    /**
+     * Get the post admin id
+     *
+     * @return int|null
+     */
+    public function getAdminId();
 
     /**
      * Get post display state
@@ -119,6 +127,15 @@ interface PostInterface
      * @return \Mc\Blog\Api\Data\PostInterface
      */
     public function setUpdateTime($updateTime);
+
+    /**
+     * Set admin id
+     *
+     * @param in $adminId
+     *
+     * @return \Mc\Blog\Api\Data\PostInterface
+     */
+    public function setAdminId($adminId);
 
     /**
      * Set is active

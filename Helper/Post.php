@@ -1,13 +1,18 @@
 <?php
+
 namespace Mc\Blog\Helper;
 
 use Mc\Blog\Api\Data\PostInterface;
 use Mc\Blog\Model\Resource\Post\Collection as PostCollection;
 use Magento\Framework\App\Action\Action;
 
+/**
+ * Post helper
+ *
+ * @package Mc\Blog\Helper
+ */
 class Post extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
     /**
      * @var \Mc\Blog\Model\Post
      */
@@ -21,10 +26,9 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Mc\Blog\Model\Post $post
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param \Magento\Framework\App\Helper\Context         $context
+     * @param \Mc\Blog\Model\Post                           $post
+     * @param \Magento\Framework\View\Result\PageFactory    $resultPageFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -40,8 +44,9 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Return a blog post from given post id.
      *
-     * @param Action $action
-     * @param null $postId
+     * @param Action    $action
+     * @param null      $postId
+     *
      * @return \Magento\Framework\View\Result\Page|bool
      */
     public function prepareResultPost(Action $action, $postId = null)
@@ -63,18 +68,17 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        // We can add our own custom page handles for layout easily.
+
         $resultPage->addHandle('blog_post_view');
 
-        // This will generate a layout handle like: blog_post_view_id_1
-        // giving us a unique handle to target specific blog posts if we wish to.
         $resultPage->addPageLayoutHandles(['id' => $this->_post->getId()]);
 
-        // Magento is event driven after all, lets remember to dispatch our own, to help people
-        // who might want to add additional functionality, or filter the posts somehow!
         $this->_eventManager->dispatch(
             'mc_blog_post_render',
-            ['post' => $this->_post, 'controller_action' => $action]
+            [
+                'post' => $this->_post,
+                'controller_action' => $action
+            ]
         );
 
         return $resultPage;

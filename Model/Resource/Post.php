@@ -2,9 +2,13 @@
 
 namespace Mc\Blog\Model\Resource;
 
+/**
+ * Post resource
+ *
+ * @package Mc\Blog\Model\Resource
+ */
 class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -19,8 +23,8 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param string|null $resourcePrefix
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime       $date
+     * @param string|null                                       $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -46,12 +50,13 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Process post data before saving
      *
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return $this
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-
         if (!$this->isValidPostUrlKey($object)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The post URL key contains capital letters or disallowed symbols.')
@@ -68,6 +73,8 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object->setCreationTime($this->_date->gmtDate());
         }
 
+        /** @TODO: add in logged in admin id */
+
         $object->setUpdateTime($this->_date->gmtDate());
 
         return parent::_beforeSave($object);
@@ -76,9 +83,10 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load an object using 'url_key' field if there's no field specified and value is not numeric
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field
+     * @param \Magento\Framework\Model\AbstractModel    $object
+     * @param mixed                                     $value
+     * @param string                                    $field
+     *
      * @return $this
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
@@ -93,17 +101,24 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve select object for load object data
      *
-     * @param string $field
-     * @param mixed $value
-     * @param \Mc\Blog\Model\Post $object
+     * Also join on admin_user to get admin username
+     *
+     * @param string                $field
+     * @param mixed                 $value
+     * @param \Mc\Blog\Model\Post   $object
+     *
      * @return \Zend_Db_Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
 
-        $select->where(
-            'is_active = ?',
+        $select->joinLeft(
+            ['admin_user' => $this->getTable('admin_user')],
+            $this->getMainTable() . '.admin_id = admin_user.user_id',
+            ['username']
+        )->where(
+            $this->getMainTable() . '.is_active = ?',
             1
         )->limit(
             1
@@ -115,8 +130,9 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve load select with filter by url_key and activity
      *
-     * @param string $url_key
-     * @param int $isActive
+     * @param string    $url_key
+     * @param int       $isActive
+     *
      * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadByUrlKeySelect($url_key, $isActive = null)
@@ -139,6 +155,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *  Check whether post url key is numeric
      *
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return bool
      */
     protected function isNumericPostUrlKey(\Magento\Framework\Model\AbstractModel $object)
@@ -150,6 +167,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *  Check whether post url key is valid
      *
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return bool
      */
     protected function isValidPostUrlKey(\Magento\Framework\Model\AbstractModel $object)
@@ -159,9 +177,11 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Check if post url key exists
+     *
      * return post id if post exists
      *
      * @param string $url_key
+     *
      * @return int
      */
     public function checkUrlKey($url_key)
