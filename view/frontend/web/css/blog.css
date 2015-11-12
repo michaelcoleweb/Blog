@@ -3,3 +3,15 @@
     padding: 0;
     margin: 0;
 }
+
+#blog-post-list li {
+    margin: 0;
+    padding: 25px;
+    border-top: 1px dashed #7e807e;
+    border-bottom: 1px dashed #7e807e;
+}
+
+#blog-post-list li:first-child {
+    border-top: none;
+    padding-top: 0;
+}
