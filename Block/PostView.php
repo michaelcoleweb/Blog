@@ -13,7 +13,6 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class PostView extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
-
     /**
      * Construct
      *
