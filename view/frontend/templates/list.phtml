@@ -1,6 +1,6 @@
 <?php /** @var $block \Mc\Blog\Block\PostList */ ?>
 <h1><?php echo __('Latest Blog Posts') ?></h1>
-<ul class="blog-post-list">
+<ul id="blog-post-list">
     <?php /** @var $post \Mc\Blog\Model\Post */ ?>
     <?php foreach ($block->getPosts() as $post): ?>
         <li class="blog-post-list-item">

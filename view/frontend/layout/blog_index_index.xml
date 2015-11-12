@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mc_Blog::css/blog.css"/>
+    </head>
     <referenceBlock name="content">
         <block class="Mc\Blog\Block\PostList" name="blog.list" template="Mc_Blog::list.phtml" />
     </referenceBlock>
