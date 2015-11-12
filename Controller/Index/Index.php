@@ -28,7 +28,6 @@ class Index extends Action
      */
     public function execute()
     {
-        var_dump('test');
         return $this->resultPageFactory->create();
     }
 }
