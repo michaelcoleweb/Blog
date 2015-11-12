@@ -21,7 +21,6 @@ class Index extends \Magento\Backend\App\Action
 
     public function execute()
     {
-        var_dump('posts index');
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mc_Blog::post');
         $resultPage->addBreadCrumb(__('Blog Posts'), __('Blog Posts'));
