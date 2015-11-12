@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Mc_Blog::blog_content" title="Blog" module="Mc_Blog" resource="Mc_Blog::blog_content" sortOrder="50" parent="Magento_Backend::content"/>
+        <add id="Mc_Blog::post" title="Posts" module="Mc_Blog" resource="Mc_Blog::post" action="blog/post" sortOrder="0" parent="Mc_Blog::blog_content"/>
+    </menu>
+</config>
