@@ -21,9 +21,7 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
-        $table = $installer->getConnection()
-            ->newTable($installer->getTable('mc_blog_post'))
-            ->addColumn(
+        $post = $installer->getConnection()->newTable($installer->getTable('mc_blog_post'))->addColumn(
                 'post_id',
                 Table::TYPE_SMALLINT,
                 null,
@@ -36,10 +34,27 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('is_active', Table::TYPE_SMALLINT, null, ['nullable' => false, 'default' => '1'], 'Is Post Active?')
             ->addColumn('creation_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Creation Time')
             ->addColumn('update_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Update Time')
+            ->addColumn('admin_id', Table::TYPE_INTEGER, null, ['nullable' => false], 'Admin ID')
             ->addIndex($installer->getIdxName('blog_post', ['url_key']), ['url_key'])
             ->setComment('Blog Posts');
 
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection()->createTable($post);
+
+        $commentTable = $installer->getConnection()->newTable($installer->getTable('mc_blog_comment'))->addColumn(
+            'comment_id',
+            Table::TYPE_SMALLINT,
+            null,
+            ['identity' => true, 'nullable' => false, 'primary' => true],
+            'Comment ID'
+        )
+            ->addColumn('post_id', Table::TYPE_INTEGER, null, ['nullable' => false], 'Post Id')
+            ->addColumn('content', Table::TYPE_TEXT, '2M', [], 'Blog Content')
+            ->addColumn('is_active', Table::TYPE_SMALLINT, null, ['nullable' => false, 'default' => '1'], 'Is Comment Active?')
+            ->addColumn('creation_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Creation Time')
+            ->addColumn('customer_id', Table::TYPE_SMALLINT, null, ['nullable' => false], 'Customer Id')
+            ->setComment('Blog Comments');
+
+        $installer->getConnection()->createTable($commentTable);
 
         $installer->endSetup();
     }
