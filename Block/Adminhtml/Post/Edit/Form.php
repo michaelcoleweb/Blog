@@ -14,6 +14,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
 
     /**
+     * @var \Magento\Cms\Model\Wysiwyg\Config
+     */
+    protected $_wysiwygConfig;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -25,9 +30,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
     ) {
+        $this->_wysiwygConfig = $wysiwygConfig;
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -111,7 +118,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Content'),
                 'title' => __('Content'),
                 'style' => 'height:36em',
-                'required' => true
+                'required' => true,
+                'config' => $this->_wysiwygConfig->getConfig()
             ]
         );
 
