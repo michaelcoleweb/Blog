@@ -3,15 +3,22 @@ namespace Mc\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action;
 use Magento\TestFramework\ErrorLog\Logger;
+use Magento\TestFramework\Event\Magento;
 
 class Save extends \Magento\Backend\App\Action
 {
+    /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $backendAuthSession;
 
     /**
      * @param Action\Context $context
      */
-    public function __construct(Action\Context $context)
-    {
+    public function __construct(
+        Action\Context $context
+    ) {
+        $this->backendAuthSession = $this->_getSession();
         parent::__construct($context);
     }
 
@@ -40,6 +47,9 @@ class Save extends \Magento\Backend\App\Action
             $id = $this->getRequest()->getParam('post_id');
             if ($id) {
                 $model->load($id);
+            } else {
+                $loggedInAdminId = $this->_auth->getUser()->getUserId();
+                $data['admin_id'] = $loggedInAdminId;
             }
 
             $model->setData($data);
